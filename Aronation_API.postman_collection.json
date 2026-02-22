@@ -1,0 +1,1099 @@
+{
+    "info": {
+        "name": "Aronation Notes API",
+        "_postman_id": "aronation-notes-v1",
+        "description": "Full API collection for Aronation Notes backend.\n\n**Setup:**\n1. Set variable `baseUrl` = http://localhost:8000/api/v1\n2. Register or login → copy `accessToken` from response → set variable `token`\n3. All protected routes use `Authorization: Bearer {{token}}`",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8000/api/v1",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "PASTE_ACCESS_TOKEN_HERE",
+            "type": "string"
+        },
+        {
+            "key": "userId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "courseId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "conceptId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "chapterId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "exerciseId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "noteId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "classId",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "🔐 Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/auth/register",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"fullName\": \"Rahul Sharma\",\n  \"email\": \"rahul@test.com\",\n  \"password\": \"Test@1234\",\n  \"role\": \"student\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var json = pm.response.json();",
+                                    "if (json.data && json.data.accessToken) {",
+                                    "  pm.collectionVariables.set('token', json.data.accessToken);",
+                                    "  console.log('Token saved automatically!');",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/auth/login",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"rahul@test.com\",\n  \"password\": \"Test@1234\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Me (profile)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/auth/me"
+                    }
+                },
+                {
+                    "name": "Update Me",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/auth/me",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"fullName\": \"Rahul Kumar\",\n  \"languagePreference\": \"hi\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Refresh Token",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": "{{baseUrl}}/auth/refresh",
+                        "description": "Refresh token is sent automatically via httpOnly cookie"
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/auth/logout"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📚 Content",
+            "item": [
+                {
+                    "name": "List Courses",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/content/courses"
+                    }
+                },
+                {
+                    "name": "Get Course by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/content/courses/{{courseId}}"
+                    }
+                },
+                {
+                    "name": "Create Course (Admin)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/content/courses",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Class 10 Mathematics\",\n  \"subject\": \"Mathematics\",\n  \"grade\": 10,\n  \"board\": \"CBSE\",\n  \"language\": \"en\",\n  \"isPublished\": true\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Update Course (Admin)",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/content/courses/{{courseId}}",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"isPublished\": true\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Create Chapter (Admin)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/content/chapters",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"courseId\": \"{{courseId}}\",\n  \"title\": \"Real Numbers\",\n  \"orderIndex\": 1,\n  \"isOfflineAvailable\": true\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Chapter by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/content/chapters/{{chapterId}}"
+                    }
+                },
+                {
+                    "name": "Get Concept by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/content/concepts/{{conceptId}}"
+                    }
+                },
+                {
+                    "name": "Update Concept (Admin)",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/content/concepts/{{conceptId}}",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Euclid's Division Lemma\",\n  \"difficulty\": 2,\n  \"skillTags\": [\"number-theory\", \"division\"]\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Save Highlight (AI Dummy)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/content/highlight",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"conceptId\": \"{{conceptId}}\",\n  \"chapterId\": \"{{chapterId}}\",\n  \"highlightedText\": \"Every composite number can be expressed as a product of primes in a unique way.\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Search Content",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/content/search?q=fractions",
+                            "query": [
+                                {
+                                    "key": "q",
+                                    "value": "fractions"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🤖 AI Tutor (Dummy)",
+            "item": [
+                {
+                    "name": "Ask Tutor",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/tutor/ask",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"question\": \"Why is the square root of 2 irrational?\",\n  \"conceptId\": \"{{conceptId}}\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Explain Concept (mode)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/tutor/explain",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"conceptId\": \"{{conceptId}}\",\n  \"mode\": \"analogy\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "description": "mode can be: visual | story | steps | analogy"
+                    }
+                },
+                {
+                    "name": "Simplify Explanation",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/tutor/simplify",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"conceptId\": \"{{conceptId}}\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Translate Explanation",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/tutor/translate",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"conceptId\": \"{{conceptId}}\",\n  \"targetLanguage\": \"hi\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Why Am I Learning This?",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/tutor/relevance",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"conceptId\": \"{{conceptId}}\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "✏️ Exercises",
+            "item": [
+                {
+                    "name": "Generate Question (AI Dummy)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/exercises/generate?conceptId={{conceptId}}&difficulty=3&type=mcq",
+                            "query": [
+                                {
+                                    "key": "conceptId",
+                                    "value": "{{conceptId}}"
+                                },
+                                {
+                                    "key": "difficulty",
+                                    "value": "3"
+                                },
+                                {
+                                    "key": "type",
+                                    "value": "mcq",
+                                    "description": "mcq | fill-blank | step-based | open"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Exercise by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/exercises/{{exerciseId}}"
+                    }
+                },
+                {
+                    "name": "Submit Answer",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/exercises/submit",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"exerciseId\": \"{{exerciseId}}\",\n  \"answer\": \"Option A (correct)\",\n  \"timeTaken\": 45,\n  \"hintsUsed\": 0,\n  \"retriesCount\": 0,\n  \"mode\": \"learning\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Hint",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/exercises/hint",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"exerciseId\": \"{{exerciseId}}\",\n  \"stepNumber\": 0\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Attempt History",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/exercises/history?conceptId={{conceptId}}&limit=20",
+                            "query": [
+                                {
+                                    "key": "conceptId",
+                                    "value": "{{conceptId}}"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "20"
+                                },
+                                {
+                                    "key": "cursor",
+                                    "value": "",
+                                    "disabled": true
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Batch Generate Questions (Teacher)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/exercises/batch-generate",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"conceptId\": \"{{conceptId}}\",\n  \"count\": 5,\n  \"difficulty\": 3,\n  \"type\": \"mcq\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🧠 Adaptive Engine",
+            "item": [
+                {
+                    "name": "Get Adaptive State",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/adaptive/state"
+                    }
+                },
+                {
+                    "name": "Get Next Concept Recommendation",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/adaptive/next-concept"
+                    }
+                },
+                {
+                    "name": "Difficulty History",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/adaptive/difficulty-history"
+                    }
+                },
+                {
+                    "name": "Trigger Adaptive Update (Internal)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/adaptive/update",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"conceptId\": \"{{conceptId}}\",\n  \"skillTags\": [\"algebra\", \"fractions\"]\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📊 Analytics",
+            "item": [
+                {
+                    "name": "Learning Progress",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/analytics/progress"
+                    }
+                },
+                {
+                    "name": "Skill Breakdown",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/analytics/skills"
+                    }
+                },
+                {
+                    "name": "Heatmap Data (365 days)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/analytics/heatmap"
+                    }
+                },
+                {
+                    "name": "Weak Areas (AI Dummy Tips)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/analytics/weak-areas"
+                    }
+                },
+                {
+                    "name": "Monthly Report",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/analytics/report/2026-02",
+                        "description": "Replace '2026-02' with desired YYYY-MM"
+                    }
+                },
+                {
+                    "name": "Log Study Event",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/analytics/log",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"eventType\": \"chapter_opened\",\n  \"chapterId\": \"{{chapterId}}\",\n  \"meta\": { \"durationSeconds\": 120 }\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Class Analytics (Teacher)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/analytics/class"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🏫 Teacher",
+            "item": [
+                {
+                    "name": "Get Classroom",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/teacher/class"
+                    }
+                },
+                {
+                    "name": "Create Classroom",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/teacher/class",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"10-A Science\",\n  \"courseId\": \"{{courseId}}\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Enroll Students",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/teacher/class/{{classId}}/enroll",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"emails\": [\n    \"student1@test.com\",\n    \"student2@test.com\"\n  ]\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get AI Overrides",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/teacher/override"
+                    }
+                },
+                {
+                    "name": "Set AI Override Rule",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/teacher/override",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"rule\": \"max_difficulty\",\n  \"value\": 3\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "description": "Example rules: max_difficulty, disable_ai_hints, force_language"
+                    }
+                },
+                {
+                    "name": "Delete AI Override",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/teacher/override/0",
+                        "description": "Replace '0' with the override index to delete"
+                    }
+                },
+                {
+                    "name": "View Student Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/teacher/student/{{userId}}"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📝 Notes",
+            "item": [
+                {
+                    "name": "Summarize Highlight (AI Dummy)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/notes/summarize",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"conceptId\": \"{{conceptId}}\",\n  \"chapterId\": \"{{chapterId}}\",\n  \"highlightedText\": \"The Fundamental Theorem of Arithmetic states that every integer greater than 1 is either a prime or can be uniquely expressed as a product of primes.\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Generate Flashcards (AI Dummy)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/notes/flashcards",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"conceptId\": \"{{conceptId}}\",\n  \"highlightedText\": \"HCF and LCM relationship: HCF × LCM = Product of two numbers\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Notes",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/notes?conceptId={{conceptId}}&limit=20",
+                            "query": [
+                                {
+                                    "key": "conceptId",
+                                    "value": "{{conceptId}}",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "20"
+                                },
+                                {
+                                    "key": "cursor",
+                                    "value": "",
+                                    "disabled": true
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Note",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/notes/{{noteId}}"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🏆 Gamification",
+            "item": [
+                {
+                    "name": "Get Gamification Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/gamification/profile"
+                    }
+                },
+                {
+                    "name": "Get All Badges",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/gamification/badges"
+                    }
+                },
+                {
+                    "name": "Get Streak",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/gamification/streak"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🔄 Sync (Offline)",
+            "item": [
+                {
+                    "name": "Push Offline Attempts",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/sync/push",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"attempts\": [\n    {\n      \"exerciseId\": \"{{exerciseId}}\",\n      \"conceptId\": \"{{conceptId}}\",\n      \"answer\": \"Option A (correct)\",\n      \"isCorrect\": true,\n      \"score\": 100,\n      \"timeTaken\": 38,\n      \"hintsUsed\": 0,\n      \"mode\": \"offline\"\n    }\n  ]\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Pull Server Changes",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/sync/pull?lastSyncedAt=2026-02-01T00:00:00.000Z",
+                            "query": [
+                                {
+                                    "key": "lastSyncedAt",
+                                    "value": "2026-02-01T00:00:00.000Z"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Sync Status",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/sync/status"
+                    }
+                }
+            ]
+        }
+    ]
+}
