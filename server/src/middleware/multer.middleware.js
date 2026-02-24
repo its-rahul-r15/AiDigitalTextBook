@@ -1,20 +1,11 @@
-import multer from "multer"
-import path from "path";
+import multer from "multer";
 
 const storage = multer.diskStorage({
-  destination: function (
-    req: Express.Request,
-    file: Express.Multer.File,
-    cb
-  ) {
+  destination: function (req, file, cb) {
     cb(null, "./public/temp");
   },
-  filename: function (
-    req: Express.Request,
-    file: Express.Multer.File,
-    cb
-  ) {
-    cb(null, Date.now() + path.extname(file.originalname));
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
