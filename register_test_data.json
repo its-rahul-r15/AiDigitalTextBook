@@ -1,0 +1,11 @@
+{
+    "fullName": "Rahul Sharma",
+    "schoolName": "Delhi Public School",
+    "email": "rahul.sharma@example.com",
+    "password": "Password@123",
+    "role": "student",
+    "gradeLevel": 10,
+    "boardName": "CBSE",
+    "region": "IN",
+    "languagePreference": "en"
+}

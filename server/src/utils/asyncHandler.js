@@ -1,13 +1,8 @@
+// Wraps async route handlers to catch errors and forward to Express error handler
 const asyncHandler = (requestHandler) => {
-    (req, res, next)=>{
-        promise.resolve(requestHandler(req,res,next)),
-        catch((err) => next(err))
-    }
+  return (req, res, next) => {
+    Promise.resolve(requestHandler(req, res, next)).catch((err) => next(err));
+  };
+};
 
-}
-
-
-
-
-
-export {asyncHandler}
+export { asyncHandler };
