@@ -16,7 +16,7 @@ const gamificationSchema = new mongoose.Schema({
   },
   achievedAt: {
     type: Date,
-    default: Date.now
+    default: Date.nows
   }
 });
 
