@@ -1,0 +1,638 @@
+.page {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+@media (min-width: 1024px) {
+    .page {
+        padding: 40px;
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.header p {
+    color: #718096;
+    font-size: 14px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
+
+.enrollCard {
+    background: #E6FFFA;
+    border: 1px dashed var(--primary);
+    padding: 32px;
+}
+
+.enrollCard h3 {
+    margin-bottom: 8px;
+}
+
+.enrollCard p {
+    font-size: 14px;
+    color: #4A5568;
+    margin-bottom: 16px;
+}
+
+.textarea {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #EDEDED;
+    margin-bottom: 16px;
+    font-family: inherit;
+    resize: none;
+}
+
+.enrollActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+}
+
+.enrollActions button:first-child {
+    background: transparent;
+    border: none;
+    font-weight: 700;
+    color: #718096;
+    cursor: pointer;
+}
+
+.mainGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 1024px) {
+    .mainGrid {
+        grid-template-columns: 1fr 320px;
+    }
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.cardHeader h3 {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 800;
+    color: #A0AEC0;
+    text-transform: uppercase;
+    padding-bottom: 16px;
+}
+
+.table td {
+    padding: 16px 0;
+    border-top: 1px solid #F3F4F6;
+}
+
+.studentName {
+    display: flex;
+    flex-direction: column;
+}
+
+.studentName strong {
+    font-size: 14px;
+    color: #2D3748;
+}
+
+.studentName span {
+    font-size: 12px;
+    color: #718096;
+}
+
+.barContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.bar {
+    height: 6px;
+    background: var(--primary);
+    border-radius: 10px;
+    min-width: 40px;
+}
+
+.viewBtn {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.hint {
+    font-size: 11px;
+    color: #A0AEC0;
+    font-weight: 600;
+}
+
+.overridesList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.overrideItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #F9FAFB;
+    border-radius: 10px;
+}
+
+.ovTarget {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.ovVal {
+    font-size: 11px;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.delBtn {
+    background: transparent;
+    border: none;
+    color: #FED7D7;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.delBtn:hover {
+    color: #E53E3E;
+}
+
+.emptyOverrides {
+    text-align: center;
+    padding: 32px 0;
+}
+
+.emptyOverrides p {
+    font-size: 13px;
+    color: #A0AEC0;
+    margin-bottom: 16px;
+}
+
+.emptyContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+.emptyIcon {
+    font-size: 60px;
+}
+
+.emptyContainer h2 {
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.emptyContainer p {
+    color: #718096;
+    line-height: 1.6;
+}
+
+.fieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.fieldGroup label {
+    font-size: 12px;
+    font-weight: 800;
+    color: #A0AEC0;
+    text-transform: uppercase;
+}
+
+.input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #EDEDED;
+    font-size: 14px;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.emptyRoster {
+    text-align: center;
+    padding: 60px 0;
+}
+
+.emptyRoster p {
+    color: #A0AEC0;
+    margin-bottom: 20px;
+}
+
+.setBtn {
+    background: var(--primary-light);
+    color: var(--primary);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* ── Progress Track (for roster bar) ────────────────────────────────────────── */
+.progressTrack {
+    width: 80px;
+    height: 6px;
+    background: #F3F4F6;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* ── View Details Button ─────────────────────────────────────────────────────── */
+.viewBtn {
+    background: transparent;
+    border: 1.5px solid var(--primary);
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 6px 14px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.viewBtn:hover {
+    background: var(--primary);
+    color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STUDENT DETAIL SLIDE-OVER PANEL
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* Backdrop overlay */
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 100;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Slide panel */
+.panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 420px;
+    max-width: 95vw;
+    background: var(--card-bg, #fff);
+    border-left: 1px solid var(--border, #E5E7EB);
+    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.12);
+    z-index: 101;
+    overflow-y: auto;
+    animation: slideIn 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+.panelHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px;
+    border-bottom: 1px solid var(--border, #E5E7EB);
+    position: sticky;
+    top: 0;
+    background: var(--card-bg, #fff);
+    z-index: 1;
+}
+
+.panelTitle {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.panelEmail {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.closeBtn {
+    background: #F3F4F6;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+
+.closeBtn:hover {
+    background: #E5E7EB;
+}
+
+.panelBody {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.panelCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.panelError {
+    margin: 24px;
+    padding: 16px;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 12px;
+    color: #EF4444;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ─ 8-box stat grid ─ */
+.statGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.statBox {
+    background: #F9FAFB;
+    border-radius: 12px;
+    padding: 12px 8px;
+    text-align: center;
+    transition: transform 0.15s ease;
+}
+
+.statBox:hover {
+    transform: translateY(-2px);
+}
+
+.statEmoji {
+    font-size: 18px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.statVal {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+    line-height: 1.2;
+}
+
+.statLbl {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+}
+
+/* ─ Panel section ─ */
+.panelSection {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.panelSectionTitle {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.weakCount {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+/* ─ Mini Bar Chart ─ */
+.miniChart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 60px;
+}
+
+.miniBarWrap {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.miniBar {
+    width: 100%;
+    background: linear-gradient(to top, #6366F1, #8B5CF6);
+    border-radius: 4px 4px 0 0;
+    min-height: 4px;
+    transition: height 0.5s ease;
+}
+
+.miniDate {
+    font-size: 9px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.noData {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 16px;
+    background: #F9FAFB;
+    border-radius: 10px;
+}
+
+/* ─ Skills List ─ */
+.skillsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.skillRow {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.skillRowTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skillName {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: capitalize;
+}
+
+.skillRight {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.skillBarTrack {
+    height: 5px;
+    background: #F3F4F6;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.skillBarFill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.7s ease;
+}
+
+/* ─ Weak list ─ */
+.weakList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.weakItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    border-radius: 10px;
+}
+
+.weakInfo {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.weakName {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: capitalize;
+}
+
+.weakPct {
+    font-size: 12px;
+    font-weight: 700;
+    color: #EF4444;
+}
+
+/* ─ Panel empty ─ */
+.panelEmpty {
+    text-align: center;
+    padding: 32px 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.panelEmpty p:first-child {
+    font-size: 24px;
+    margin-bottom: 8px;
+}

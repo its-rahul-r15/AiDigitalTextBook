@@ -1,0 +1,465 @@
+.page {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    min-height: 100vh;
+}
+
+@media (min-width: 1024px) {
+    .page {
+        padding: 40px;
+    }
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1A202C;
+    margin-bottom: 4px;
+}
+
+.header p {
+    color: #718096;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    text-align: center;
+}
+
+/* AI Loader */
+.aiLoader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.pulse {
+    width: 60px;
+    height: 60px;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+    opacity: 0.3;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.2;
+    }
+
+    100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+}
+
+/* Generator View */
+.generatorBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.configCard {
+    width: 100%;
+    max-width: 480px;
+    padding: 32px;
+}
+
+.configCard h2 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.formGroup {
+    margin-bottom: 24px;
+}
+
+.formGroup label {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    color: #A0AEC0;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.formGroup:last-of-type .options {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.optBtn {
+    padding: 10px;
+    background: #F8F9FB;
+    border: 1px solid #EDEDED;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #718096;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.activeOpt {
+    background: #E6FFFA;
+    border-color: var(--primary);
+    color: var(--primary);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+}
+
+/* Quiz Layout */
+.quizLayout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+    .quizLayout {
+        grid-template-columns: 1fr 300px;
+    }
+}
+
+.questionCard {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.qHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.qType {
+    font-size: 10px;
+    font-weight: 800;
+    color: #A0AEC0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.questionText {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.5;
+    color: #2D3748;
+}
+
+.mcqGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.mcqOpt {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #F8F9FB;
+    border: 1px solid #EDEDED;
+    border-radius: 12px;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4A5568;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.mcqOpt:hover {
+    border-color: var(--primary);
+    background: #fff;
+}
+
+.optLetter {
+    width: 24px;
+    height: 24px;
+    background: #E2E8F0;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #718096;
+}
+
+.selectedOpt {
+    border-color: var(--primary);
+    background: #E6FFFA;
+}
+
+.selectedOpt .optLetter {
+    background: var(--primary);
+    color: #fff;
+}
+
+.answerForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.textField {
+    width: 100%;
+    padding: 16px;
+    background: #F8F9FB;
+    border: 1px solid #EDEDED;
+    border-radius: 12px;
+    font-size: 14px;
+    resize: none;
+    transition: border-color 0.2s;
+}
+
+.textField:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #fff;
+}
+
+.feedback {
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.success {
+    background: #F0FFF4;
+    color: #2F855A;
+    border: 1px solid #C6F6D5;
+}
+
+.error {
+    background: #FFF5F5;
+    color: #C53030;
+    border: 1px solid #FED7D7;
+}
+
+.hintBox {
+    padding: 16px;
+    background: #E6FFFA;
+    color: #2C7A7B;
+    border-radius: 12px;
+    font-size: 13px;
+    border-left: 4px solid var(--primary);
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .actions {
+        flex-direction: column;
+    }
+
+    .actions button {
+        width: 100%;
+    }
+}
+
+.hintBtn {
+    background: transparent;
+    border: none;
+    color: #8E9AAF;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.quizAside {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.tipsBox {
+    background: #F8F9FB;
+    padding: 24px;
+    border-radius: var(--radius-xl);
+    border: 1px solid #EDEDED;
+}
+
+.tipsBox h3 {
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--primary);
+}
+
+.tipsBox p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #718096;
+    font-style: italic;
+}
+
+.exitBtn {
+    padding: 12px;
+    background: #FFF5F5;
+    color: #C53030;
+    border: 1px solid #FED7D7;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.exitBtn:hover {
+    background: #C53030;
+    color: #fff;
+}
+
+/* ── New additions ────────────────────────────────────────────────────────────── */
+
+/* Header row: align title + session stats */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.titleArea {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Live session stats pills in header */
+.sessionStats {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.statPill {
+    padding: 6px 14px;
+    background: #F3F4F6;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Concept selector dropdown */
+.select {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #EDEDED;
+    font-size: 14px;
+    background: #F8F9FB;
+    color: #4A5568;
+    cursor: pointer;
+}
+
+.select:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #fff;
+}
+
+/* 3-column option grid for 3-item type selector */
+.options {
+    grid-template-columns: repeat(3, 1fr) !important;
+}
+
+/* Correct answer highlight (green) shown after reveal */
+.correctOpt {
+    border-color: #10B981 !important;
+    background: #F0FFF4 !important;
+    color: #065F46 !important;
+}
+
+.correctOpt .optLetter {
+    background: #10B981;
+    color: #fff;
+}
+
+/* Wrong selection highlight (red) shown after reveal */
+.wrongOpt {
+    border-color: #EF4444 !important;
+    background: #FFF5F5 !important;
+    color: #C53030 !important;
+}
+
+.wrongOpt .optLetter {
+    background: #EF4444;
+    color: #fff;
+}
+
+/* Primary action wrapper in the actions bar */
+.primaryAction {
+    margin-left: auto;
+}
+
+/* Session mini-stats in the sidebar */
+.miniStats {
+    background: #F8F9FB;
+    border-radius: 14px;
+    border: 1px solid #EDEDED;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 16px 12px;
+    gap: 8px;
+    text-align: center;
+}
+
+.miniStat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.miniStatVal {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-primary, #1A202C);
+}
+
+.miniStatLbl {
+    font-size: 9px;
+    font-weight: 700;
+    color: #A0AEC0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}

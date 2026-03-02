@@ -1,0 +1,544 @@
+/* ─── DashboardPage.module.css ─────────────────────────────────────────────── */
+
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 8px 0 40px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────────── */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.title {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.highlight {
+    color: var(--primary);
+}
+
+.sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.headerActions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.detailsBtn {
+    padding: 10px 20px;
+    background: transparent;
+    color: var(--primary);
+    border: 1.5px solid var(--primary);
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.detailsBtn:hover {
+    background: var(--primary);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+}
+
+.quickPracticeBtn {
+    padding: 10px 20px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.quickPracticeBtn:hover {
+    background: var(--primary-dark, #4f46e5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
+}
+
+/* ── Error Banner ────────────────────────────────────────────────────────────── */
+.errorBanner {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #EF4444;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ── Stat Cards Row ─────────────────────────────────────────────────────────── */
+.statsRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.statCard {
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border, #E5E7EB);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.statCard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.statIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.statLabel {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+}
+
+.statValue {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.statSub {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+/* ── Main Grid ──────────────────────────────────────────────────────────────── */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* ── Generic Card ────────────────────────────────────────────────────────────── */
+.card {
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border, #E5E7EB);
+    border-radius: 20px;
+    padding: 24px;
+    transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
+}
+
+.heatmapCard {
+    grid-column: span 2;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.cardHeader h3 {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.cardMeta {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.badge {
+    padding: 4px 10px;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary, #6366F1);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.badgeSuccess {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+}
+
+/* ── Weekly Goal Card ────────────────────────────────────────────────────────── */
+
+.goalBody {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.goalInfo {
+    flex: 1;
+}
+
+.goalTime {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.goalTarget {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+.progressBar {
+    height: 8px;
+    background: #F3F4F6;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(to right, #6366F1, #8B5CF6);
+    border-radius: 10px;
+    transition: width 1s ease;
+}
+
+/* ── Skill Mastery ───────────────────────────────────────────────────────────── */
+.skillList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.skillItem {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.skillInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.skillMeta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.trendUp {
+    color: #10B981;
+    font-size: 12px;
+}
+
+.trendDown {
+    color: #EF4444;
+    font-size: 12px;
+}
+
+.trendStable {
+    color: #9CA3AF;
+    font-size: 12px;
+}
+
+.skillBar {
+    height: 6px;
+    background: #F3F4F6;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.skillFill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.8s ease;
+}
+
+.viewMore {
+    display: block;
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.viewMore:hover {
+    opacity: 0.7;
+}
+
+/* ── Sparkline / Performance Trend ──────────────────────────────────────────── */
+.sparkline {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 80px;
+    margin-bottom: 8px;
+}
+
+.sparkBar {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    background: #F3F4F6;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.sparkFill {
+    width: 100%;
+    border-radius: 6px;
+    transition: height 0.5s ease;
+    opacity: 0.85;
+}
+
+.sparklineEmpty {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+    background: #F9FAFB;
+    border-radius: 12px;
+    margin-bottom: 8px;
+}
+
+.sparklineLabel {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+/* ── Weak Areas / Tips ───────────────────────────────────────────────────────── */
+.tipsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tipItem {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: #F9FAFB;
+    border-radius: 12px;
+    transition: background 0.2s ease;
+}
+
+.tipItem:hover {
+    background: #F3F4F6;
+}
+
+.tipIcon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.tipContent {
+    flex: 1;
+    min-width: 0;
+}
+
+.tipTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.tipArea {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-primary);
+    text-transform: capitalize;
+}
+
+.tipScore {
+    font-size: 12px;
+    font-weight: 700;
+    color: #EF4444;
+}
+
+.tipText {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 6px;
+}
+
+.tipBar {
+    height: 4px;
+    background: #E5E7EB;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.tipBarFill {
+    height: 100%;
+    background: linear-gradient(to right, #EF4444, #F59E0B);
+    border-radius: 4px;
+    transition: width 0.8s ease;
+}
+
+/* ── Heatmap ─────────────────────────────────────────────────────────────────── */
+.heatmap {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.heatSquare {
+    aspect-ratio: 1;
+    border-radius: 3px;
+    cursor: default;
+    transition: transform 0.15s ease;
+}
+
+.heatSquare:hover {
+    transform: scale(1.3);
+}
+
+.heatmapLegend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    justify-content: flex-end;
+}
+
+.legendSquare {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+/* ── Empty State ─────────────────────────────────────────────────────────────── */
+.emptyState {
+    text-align: center;
+    padding: 24px 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.emptyState p:first-child {
+    font-size: 20px;
+    margin-bottom: 6px;
+}
+
+.emptyHint {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* ── Quick Links ─────────────────────────────────────────────────────────────── */
+.quickLinks {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.quickLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px;
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border, #E5E7EB);
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.quickLink:hover {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .statsRow {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .heatmapCard {
+        grid-column: span 1;
+    }
+
+    .statsRow {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .quickLinks {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .headerActions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

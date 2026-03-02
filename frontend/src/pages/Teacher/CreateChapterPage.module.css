@@ -1,0 +1,143 @@
+.page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.header {
+    margin-bottom: 32px;
+}
+
+.back {
+    display: inline-block;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+.back:hover {
+    color: var(--primary);
+}
+
+.header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 6px;
+}
+
+.header p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin: 0;
+}
+
+.formCard {
+    padding: 32px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.select,
+.textarea {
+    padding: 12px;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color var(--transition);
+    font-family: inherit;
+}
+
+.textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.select:focus,
+.textarea:focus {
+    border-color: var(--primary);
+}
+
+.checkboxField {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.checkboxField input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.checkboxField label {
+    cursor: pointer;
+}
+
+.errorText {
+    color: var(--danger);
+    font-size: 12px;
+    font-weight: 600;
+    margin: 4px 0 0;
+}
+
+.skeleton {
+    padding: 12px;
+    background: var(--bg-main);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-style: italic;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.6;
+    }
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.actions button {
+    min-width: 140px;
+}

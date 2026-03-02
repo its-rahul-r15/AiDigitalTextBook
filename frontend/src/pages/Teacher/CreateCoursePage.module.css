@@ -1,0 +1,114 @@
+.page {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+@media (min-width: 1024px) {
+    .page {
+        padding: 40px;
+    }
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.backBtn {
+    background: #F3F4F6;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    color: #4A5568;
+    cursor: pointer;
+}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    max-width: 1000px;
+}
+
+@media (min-width: 1024px) {
+    .container {
+        grid-template-columns: 1fr 300px;
+    }
+}
+
+.formCard {
+    padding: 32px;
+}
+
+.fieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.fieldGroup label {
+    font-size: 11px;
+    font-weight: 800;
+    color: #A0AEC0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input,
+.textarea,
+.select {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #EDEDED;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.tipsAside {
+    display: flex;
+    flex-direction: column;
+}
+
+.tipBox {
+    background: #E6FFFA;
+    padding: 24px;
+    border-radius: 16px;
+    border-left: 4px solid var(--primary);
+}
+
+.tipBox h3 {
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--primary);
+}
+
+.tipBox p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #2C7A7B;
+}

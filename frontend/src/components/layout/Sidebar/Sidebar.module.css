@@ -1,0 +1,185 @@
+.sidebar {
+    display: none;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--bg-sidebar);
+    flex-direction: column;
+    color: #fff;
+    padding: 24px 16px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+}
+
+@media (min-width: 1024px) {
+    .sidebar {
+        display: flex;
+    }
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px 32px;
+}
+
+.brandLogo {
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.brandLogo svg {
+    width: 24px;
+    height: 24px;
+}
+
+.brandName {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #fff;
+}
+
+.brandSub {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--primary);
+    opacity: 0.8;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: #ffffff99;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    transition: all var(--transition);
+}
+
+.navItem:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.active {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--primary);
+}
+
+.navIcon {
+    font-size: 18px;
+}
+
+.sidebarFooter {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 16px;
+}
+
+.upgradeCard {
+    background: rgba(16, 185, 129, 0.08);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+.upgradeTitle {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.upgradeText {
+    font-size: 11px;
+    color: #ffffff99;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.userProfile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 8px;
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: background var(--transition);
+}
+
+.userProfile:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.avatarWrap {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #2D3748;
+}
+
+.userAvatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.userName {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.userRole {
+    font-size: 11px;
+    color: #ffffff66;
+}
+
+.logoutBtn {
+    margin-left: auto;
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    transition: all var(--transition);
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logoutBtn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    opacity: 1;
+    transform: scale(1.1);
+}

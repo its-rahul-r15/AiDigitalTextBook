@@ -1,0 +1,269 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.headerRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.headerRow h2 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.settingsBtn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 4px 8px;
+    transition: color var(--transition);
+}
+
+.settingsBtn:hover {
+    color: var(--text-primary);
+}
+
+.avatarSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+}
+
+.avatarWrap {
+    position: relative;
+}
+
+.avatar {
+    width: 88px;
+    height: 88px;
+    background: var(--primary-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: 800;
+    color: #fff;
+    box-shadow: var(--shadow-lg);
+    border: 4px solid var(--bg-card);
+}
+
+.levelBadge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--primary-gradient);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--bg-card);
+    letter-spacing: 0.4px;
+}
+
+.userName {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.userRole {
+    font-size: 14px;
+    color: var(--primary);
+    font-weight: 600;
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.masteryRingWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 160px;
+}
+
+.spinnerWrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.ring {
+    width: 140px;
+    height: 140px;
+}
+
+.ringText {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.ringPct {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.ringLabel {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.6px;
+}
+
+.errorMsg {
+    color: var(--danger);
+    font-size: 13px;
+    text-align: center;
+}
+
+.statsRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.statBox {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 14px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    box-shadow: var(--shadow-sm);
+}
+
+.statNum {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.statLabel {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.xpCard {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.xpTop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.xpHint {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0 0 3px;
+}
+
+.xpNum {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.xpIcon {
+    font-size: 22px;
+}
+
+.xpBar {
+    height: 8px;
+    background: var(--border-light);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.xpFill {
+    height: 100%;
+    background: var(--primary-gradient);
+    border-radius: 4px;
+    transition: width 1.2s ease;
+}
+
+.sectionRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.sectionRow h4 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.badgeList {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.badgeCard {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.badgeIcon {
+    font-size: 18px;
+}
+
+.badgeName {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.logoutBtn {
+    width: 100%;
+    padding: 12px;
+    background: none;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--danger);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition);
+    margin-top: 4px;
+}
+
+.logoutBtn:hover {
+    background: rgba(217, 48, 37, 0.06);
+    border-color: var(--danger);
+}

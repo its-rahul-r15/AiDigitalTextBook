@@ -1,0 +1,151 @@
+.page {
+    min-height: 100vh;
+    background: var(--bg-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 460px;
+}
+
+.selectGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.selectLabel {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.select {
+    padding: 10px 12px;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color var(--transition);
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.select:focus {
+    border-color: var(--primary);
+}
+
+.back {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: inline-block;
+    margin-bottom: 24px;
+    transition: color var(--transition);
+}
+
+.back:hover {
+    color: var(--primary);
+}
+
+.logoWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 28px;
+}
+
+.logo {
+    width: 48px;
+    height: 48px;
+    background: var(--primary-gradient);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #fff;
+    box-shadow: var(--shadow-primary);
+    margin-bottom: 4px;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.roleGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.roleLabel {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.roleBtns {
+    display: flex;
+    gap: 10px;
+}
+
+.roleBtn {
+    flex: 1;
+    padding: 10px;
+    background: var(--bg-main);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all var(--transition);
+    text-transform: capitalize;
+}
+
+.roleBtnActive {
+    border-color: var(--primary);
+    background: rgba(67, 97, 238, 0.07);
+    color: var(--primary);
+}
+
+.switch {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.switch a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}

@@ -1,0 +1,79 @@
+AIDA Project Features
+
+Authentication & User Management:
+- User registration, login, logout
+- Refresh access tokens
+- View and update own profile
+- Role-based access (student, teacher, admin)
+
+Content & Learning:
+- Browse courses, view course details
+- View chapters and individual chapter content
+- Retrieve specific concepts
+- Search content by query
+- Save highlights (placeholder)
+- Take and manage personal notes
+- Delete notes
+- View learning progress
+- Update progress and study time
+
+Adaptive Learning:
+- Retrieve current adaptive state
+- Get recommended next concept (AI dummy)
+- View difficulty history
+- Internal adaptive update trigger
+
+Analytics:
+- Student progress overview
+- Skill analytics
+- Study heatmap
+- Daily performance trends
+- Identify weak areas
+- Monthly reports
+- Log study events
+- Teacher/class analytics dashboard
+
+Exercises:
+- Generate questions (with concept, difficulty, type parameters)
+- View attempt history
+- Fetch specific exercise by ID
+- Submit answers
+- Request hints (AI placeholder)
+- Batch generate questions (teacher/admin)
+
+AI Tutor (dummy services):
+- Ask a question (Q&A)
+- Explain a concept (visual/story/steps/analogy)
+- Simplify explanations
+- Translate explanations to other languages
+- Explain relevance of topics
+
+Teacher & Admin Tools:
+- View and manage classes
+- Create new classes
+- Enroll students into classes
+- View and set overrides for adaptive or progress
+- Delete overrides
+- View individual student profiles
+- Content creation and editing (courses, chapters, concepts) [admin/teacher]
+
+Sync & Offline Support:
+- Push offline attempt data
+- Pull server-side changes
+- Check sync status
+
+Notes & Study Aids:
+- List notes with filtering and pagination
+- Summarize highlights (AI dummy)
+- Generate flashcards from notes (AI dummy)
+
+Gamification:
+- View gamification profile
+- Browse earned badges
+- Track study streaks
+
+Miscellaneous:
+- Rate limiting on login/register
+- Middleware for authorization, sanitization, validation
+
+This file is intended as a reference for UI/UX design.

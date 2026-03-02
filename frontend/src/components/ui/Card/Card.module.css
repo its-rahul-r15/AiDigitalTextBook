@@ -1,0 +1,21 @@
+.card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+    padding: 20px;
+}
+
+.hover {
+    transition: transform var(--transition), box-shadow var(--transition);
+    cursor: pointer;
+}
+
+.hover:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.noPad {
+    padding: 0;
+}
