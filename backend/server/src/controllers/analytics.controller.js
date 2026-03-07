@@ -4,6 +4,10 @@ import { ApiResponse } from "../utils/apiResponse.js";
 import { ApiError } from "../utils/apiError.js";
 import * as analyticsService from "../services/analytics.service.js";
 import Report from "../models/Report.model.js";
+import ChatHistory from "../models/ChatHistory.model.js";
+import AttemptLog from "../models/AttemptLog.model.js";
+import UserProgress from "../models/UserProgress.model.js";
+import User from "../models/User.model.js";
 
 // ─── @desc   Full learning progress dashboard for a student
 // ─── @route  GET /api/v1/analytics/progress
@@ -106,4 +110,52 @@ export const getClassAnalytics = asyncHandler(async (req, res) => {
 // ─── @access Student
 export const logStudyEvent = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, {}, "Study event logged"));
+});
+
+// ─── @desc   Get a specific student's full analytics overview
+// ─── @route  GET /api/v1/analytics/student/:id
+// ─── @access Teacher, Admin
+export const getStudentAnalytics = asyncHandler(async (req, res) => {
+    const studentId = req.params.id;
+
+    // Verify student exists
+    const student = await User.findById(studentId).select("name email gradeLevel languagePreference");
+    if (!student) throw new ApiError(404, "Student not found");
+
+    // 1. Fetch User Progress (Total Study Time)
+    const progress = await UserProgress.findOne({ userId: studentId }).lean();
+
+    // 2. Fetch Quiz Attempt Summaries (Last 50 attempts)
+    const attemptLogs = await AttemptLog.find({ userId: studentId })
+        .sort({ createdAt: -1 })
+        .limit(50)
+        .populate("conceptId", "title")
+        .populate("exerciseId", "question type difficulty")
+        .lean();
+
+    // Calculate basic quiz stats from the logs
+    const totalAttempts = await AttemptLog.countDocuments({ userId: studentId });
+    const correctAttempts = await AttemptLog.countDocuments({ userId: studentId, isCorrect: true });
+    const accuracy = totalAttempts > 0 ? Math.round((correctAttempts / totalAttempts) * 100) : 0;
+
+    // 3. Fetch Recent AI Chat History (Last 50 interactions)
+    const chatHistory = await ChatHistory.find({ userId: studentId })
+        .sort({ createdAt: -1 })
+        .limit(50)
+        .populate("conceptId", "title")
+        .lean();
+
+    // Assemble payload
+    const data = {
+        student,
+        overview: {
+            studyTimeMinutes: progress?.studyTimeMinutes || 0,
+            totalQuizAttempts: totalAttempts,
+            overallAccuracy: `${accuracy}%`,
+        },
+        recentChats: chatHistory,
+        recentQuizAttempts: attemptLogs,
+    };
+
+    return res.status(200).json(new ApiResponse(200, data, "Student analytics retrieved successfully"));
 });

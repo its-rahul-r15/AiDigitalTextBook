@@ -16,5 +16,6 @@ router.post("/log", protect, analyticsController.logStudyEvent);
 
 // ── Teacher analytics ─────────────────────────────────────────────────────────
 router.get("/class", protect, allow("teacher", "admin"), analyticsController.getClassAnalytics);
+router.get("/student/:id", protect, allow("teacher", "admin"), analyticsController.getStudentAnalytics);
 
 export default router;

@@ -11,6 +11,8 @@ import Concept from "../models/concept.model.js";
 import Note from "../models/Note.model.js";
 import UserProgress from "../models/UserProgress.model.js";
 import * as noteService from "../services/notes.service.js";
+import { generateContent } from "../config/gemini.js";
+import logger from "../utils/logger.util.js";
 
 // ─── @desc   Update student learning progress
 // ─── @route  POST /api/v1/content/progress
@@ -161,6 +163,40 @@ export const createChapter = asyncHandler(async (req, res) => {
     return res.status(201).json(new ApiResponse(201, chapter, "Chapter created successfully and linked to course"));
 });
 
+// ─── @desc   Update chapter content sections (text, images, diagrams)
+// ─── @route  PUT /api/v1/content/chapters/:id/content
+// ─── @access Teacher / Admin
+export const updateChapterContent = asyncHandler(async (req, res) => {
+    const { contentSections } = req.body;
+
+    if (!Array.isArray(contentSections)) {
+        throw new ApiError(400, "contentSections must be an array");
+    }
+
+    // Validate each section
+    for (const section of contentSections) {
+        if (!["text", "image", "diagram"].includes(section.type)) {
+            throw new ApiError(400, `Invalid section type: ${section.type}`);
+        }
+        if (section.type === "text" && !section.body?.trim()) {
+            throw new ApiError(400, "Text sections must have a body");
+        }
+        if ((section.type === "image" || section.type === "diagram") && !section.url?.trim()) {
+            throw new ApiError(400, `${section.type} sections must have a url`);
+        }
+    }
+
+    const chapter = await Chapter.findByIdAndUpdate(
+        req.params.id,
+        { contentSections },
+        { new: true, runValidators: true }
+    );
+
+    if (!chapter) throw new ApiError(404, "Chapter not found");
+
+    return res.status(200).json(new ApiResponse(200, chapter, "Chapter content updated successfully"));
+});
+
 // ─── @desc   Get a single concept (atomic learning node)
 // ─── @route  GET /api/v1/content/concepts/:id
 // ─── @access Student
@@ -247,5 +283,194 @@ export const searchContent = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
         new ApiResponse(200, { results: concepts, total: concepts.length }, "Search completed")
+    );
+});
+
+// ─── @desc   Generate an AI cheatsheet for a chapter
+// ─── @route  GET /api/v1/content/chapters/:id/cheatsheet
+// ─── @access Student
+export const generateCheatsheet = asyncHandler(async (req, res) => {
+    const chapter = await Chapter.findById(req.params.id).lean();
+    if (!chapter) throw new ApiError(404, "Chapter not found");
+
+    // Build context from chapter content
+    const textParts = [`Chapter: ${chapter.title}`];
+    if (chapter.description) textParts.push(chapter.description);
+    const sections = (chapter.contentSections || []).sort(
+        (a, b) => (a.orderIndex || 0) - (b.orderIndex || 0)
+    );
+    for (const section of sections) {
+        if (section.type === "text" && section.body) textParts.push(section.body);
+        if (section.caption) textParts.push(`[${section.type}]: ${section.caption}`);
+    }
+
+    let chapterContent = textParts.join("\n\n");
+    if (chapterContent.length > 4000) chapterContent = chapterContent.substring(0, 4000) + "...";
+
+    const prompt = `You are an expert teacher creating a VISUAL CHEATSHEET / quick-revision flashcard for students. Based on the chapter content below, create a comprehensive cheatsheet. Make it visually structured and easy to scan.
+
+Chapter Content:
+${chapterContent}
+
+Return ONLY valid JSON (no markdown, no explanation) in this format:
+{
+  "title": "Chapter title",
+  "emoji": "relevant emoji",
+  "sections": [
+    {
+      "heading": "🔑 Key Concepts",
+      "type": "bullets",
+      "items": ["point 1", "point 2", ...]
+    },
+    {
+      "heading": "📐 Formulas & Rules",
+      "type": "formulas",
+      "items": ["formula 1", "formula 2", ...]
+    },
+    {
+      "heading": "📖 Definitions",
+      "type": "definitions",
+      "items": [{"term": "term1", "meaning": "meaning1"}, ...]
+    },
+    {
+      "heading": "💡 Remember",
+      "type": "tips",
+      "items": ["memory tip 1", "mnemonic 1", ...]
+    },
+    {
+      "heading": "⚡ Quick Summary",
+      "type": "summary",
+      "items": ["1-2 line summary of whole chapter"]
+    }
+  ]
+}
+
+Include only sections that are relevant. If chapter is about math, include formulas. If history, focus on key events and dates. Be concise but comprehensive.`;
+
+    try {
+        logger.info("Generating cheatsheet for chapter", { chapterId: chapter._id });
+        const aiResponse = await generateContent(prompt, 5000);
+
+        if (aiResponse) {
+            let jsonText = aiResponse.replace(/```(json)?/gi, "").trim();
+
+            let cheatsheet;
+            try {
+                cheatsheet = JSON.parse(jsonText);
+            } catch (parseErr) {
+                // JSON truncated — try to repair it
+                logger.warn("Cheatsheet JSON truncated, attempting repair", { error: parseErr.message });
+
+                // Find the last complete section by looking for last complete }] pattern
+                // Strategy: find all complete section objects and wrap them
+                let repaired = jsonText;
+
+                // Try to close open strings and brackets
+                // Remove any trailing incomplete string/object
+                const lastCompleteArray = repaired.lastIndexOf("]");
+                const lastCompleteObj = repaired.lastIndexOf("}");
+
+                if (lastCompleteArray > 0 || lastCompleteObj > 0) {
+                    // Find the last point where we have a complete items array
+                    const lastGoodSection = repaired.lastIndexOf('"items"');
+                    if (lastGoodSection > 0) {
+                        // Find the enclosing ] for this items array
+                        let bracketPos = repaired.indexOf("]", lastGoodSection);
+                        if (bracketPos > 0) {
+                            // Check if there's a } after it (closing the section)
+                            let closeBrace = repaired.indexOf("}", bracketPos);
+                            if (closeBrace > 0) {
+                                repaired = repaired.substring(0, closeBrace + 1) + "]}";
+                            } else {
+                                repaired = repaired.substring(0, bracketPos + 1) + "}]}";
+                            }
+                        }
+                    }
+                }
+
+                try {
+                    cheatsheet = JSON.parse(repaired);
+                    logger.info("Successfully repaired truncated cheatsheet JSON");
+                } catch (_) {
+                    // Last resort: extract title and any complete sections manually
+                    const titleMatch = jsonText.match(/"title"\s*:\s*"([^"]+)"/);
+                    const emojiMatch = jsonText.match(/"emoji"\s*:\s*"([^"]+)"/);
+                    cheatsheet = {
+                        title: titleMatch ? titleMatch[1] : chapter.title,
+                        emoji: emojiMatch ? emojiMatch[1] : "📋",
+                        sections: [{
+                            heading: "📖 Chapter Overview",
+                            type: "bullets",
+                            items: [chapter.description || "AI response was too long. Try again for a shorter chapter."]
+                        }],
+                    };
+                }
+            }
+
+            // Convert cheatsheet sections into flashcards (front/back) and save to Notes
+            const flashcards = [];
+            for (const sec of (cheatsheet.sections || [])) {
+                if (sec.type === "definitions" && Array.isArray(sec.items)) {
+                    for (const item of sec.items) {
+                        if (typeof item === "object" && item.term && item.meaning) {
+                            flashcards.push({ front: item.term, back: item.meaning });
+                        }
+                    }
+                } else if (sec.type === "formulas" && Array.isArray(sec.items)) {
+                    for (const item of sec.items) {
+                        if (typeof item === "string") {
+                            flashcards.push({ front: `📐 Formula: ${item}`, back: `${sec.heading}: ${item}` });
+                        }
+                    }
+                } else if (Array.isArray(sec.items)) {
+                    for (const item of sec.items) {
+                        const text = typeof item === "string" ? item : JSON.stringify(item);
+                        if (text.length > 5) {
+                            flashcards.push({ front: `${sec.heading}`, back: text });
+                        }
+                    }
+                }
+            }
+
+            // Save as a Note with flashcards so it appears in /flashcards page
+            try {
+                if (flashcards.length > 0) {
+                    await Note.findOneAndUpdate(
+                        { userId: req.user._id, chapterId: chapter._id, highlightedText: `__cheatsheet__${chapter._id}` },
+                        {
+                            userId: req.user._id,
+                            conceptId: chapter.concepts?.[0] || chapter._id,
+                            chapterId: chapter._id,
+                            highlightedText: `__cheatsheet__${chapter._id}`,
+                            summary: `${cheatsheet.emoji || "📋"} ${cheatsheet.title || chapter.title} — AI Cheatsheet`,
+                            flashcards,
+                            cheatsheetData: cheatsheet,
+                        },
+                        { upsert: true, new: true }
+                    );
+                }
+            } catch (saveErr) {
+                logger.warn("Failed to save cheatsheet to notes", { error: saveErr.message });
+            }
+
+            return res.status(200).json(
+                new ApiResponse(200, cheatsheet, "Cheatsheet generated and saved to flashcards!")
+            );
+        }
+    } catch (err) {
+        logger.error("Cheatsheet generation failed", { error: err.message });
+    }
+
+    // Fallback
+    return res.status(200).json(
+        new ApiResponse(200, {
+            title: chapter.title,
+            emoji: "📋",
+            sections: [{
+                heading: "📖 Chapter Overview",
+                type: "bullets",
+                items: [chapter.description || "Review this chapter for key concepts."]
+            }],
+        }, "Basic cheatsheet generated (AI unavailable)")
     );
 });

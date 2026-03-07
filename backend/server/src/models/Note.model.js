@@ -43,6 +43,8 @@ const noteSchema = new mongoose.Schema(
         // AI-generated flashcards from this highlight
         // TO ADD AI: Populate this array from GPT-4o output in notes.service.js
         flashcards: [flashcardSchema],
+        // Raw cheatsheet JSON for visual rendering (only for cheatsheet-generated notes)
+        cheatsheetData: { type: mongoose.Schema.Types.Mixed, default: null },
     },
     { timestamps: true }
 );

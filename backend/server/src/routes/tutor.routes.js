@@ -10,5 +10,8 @@ router.post("/explain", protect, tutorController.explainConcept);     // visual/
 router.post("/simplify", protect, tutorController.simplifyExplanation);// Simpler re-explanation
 router.post("/translate", protect, tutorController.translateExplanation);// Language translation
 router.post("/relevance", protect, tutorController.explainRelevance);   // "Why am I learning this?"
+router.post("/chat", protect, tutorController.chatWithTutor);           // Free-form chat
+router.get("/history", protect, tutorController.getChatHistory);          // Chat history (paginated)
+router.get("/history/search", protect, tutorController.searchChatHistory); // Search chat history
 
 export default router;

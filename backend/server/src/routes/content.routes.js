@@ -10,6 +10,7 @@ router.get("/courses", protect, contentController.getCourses);
 router.get("/courses/:id", protect, contentController.getCourseById);
 router.get("/courses/:courseId/chapters", protect, contentController.getChaptersByCourse);
 router.get("/chapters/:id", protect, contentController.getChapterById);
+router.get("/chapters/:id/cheatsheet", protect, contentController.generateCheatsheet);
 router.get("/concepts/:id", protect, contentController.getConceptById);
 router.get("/search", protect, contentController.searchContent);     // ?q=
 router.post("/highlight", protect, contentController.saveHighlight);     // AI dummy
@@ -23,6 +24,7 @@ router.post("/progress/study-time", protect, contentController.updateStudyTime);
 router.post("/courses", protect, allow("admin", "teacher"), contentController.createCourse);
 router.put("/courses/:id", protect, allow("admin", "teacher"), contentController.updateCourse);
 router.post("/chapters", protect, allow("admin", "teacher"), contentController.createChapter);
+router.put("/chapters/:id/content", protect, allow("admin", "teacher"), contentController.updateChapterContent);
 router.put("/concepts/:id", protect, allow("admin"), contentController.updateConcept);
 
 export default router;

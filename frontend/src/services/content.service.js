@@ -6,6 +6,7 @@ export const contentService = {
     getCourse: (id) => api.get(`/content/courses/${id}`),
     getChapters: (courseId) => api.get(`/content/courses/${courseId}/chapters`),
     getChapter: (chapterId) => api.get(`/content/chapters/${chapterId}`),
+    getCheatsheet: (chapterId) => api.get(`/content/chapters/${chapterId}/cheatsheet`),
     getConcept: (id) => api.get(`/content/concepts/${id}`),
 
     // ── Search ─────────────────────────────────────────────────────────────
@@ -14,6 +15,8 @@ export const contentService = {
     // ── Management (Teacher/Admin) ─────────────────────────────────────────
     createCourse: (data) => api.post('/content/courses', data),
     createChapter: (data) => api.post('/content/chapters', data),
+    updateChapterContent: (chapterId, contentSections) =>
+        api.put(`/content/chapters/${chapterId}/content`, { contentSections }),
 
     // ── Progress & Tracking ───────────────────────────────────────────────
     getProgress: () => api.get('/content/progress'),

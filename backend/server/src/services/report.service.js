@@ -25,6 +25,7 @@ import AttemptLog from "../models/AttemptLog.model.js";
 import SkillProfile from "../models/SkillProfile.model.js";
 import Report from "../models/Report.model.js";
 import logger from "../utils/logger.util.js";
+import { generateContent } from "../config/gemini.js";
 
 /**
  * Compute raw metrics from attempt logs for a given month.
@@ -90,16 +91,39 @@ export async function generateMonthlyReport(userId, month) {
     try {
         const rawMetrics = await computeRawMetrics(userId, month);
 
-        // ── DUMMY AI INSIGHTS ─────────────────────────────────────────────────
-        // TO ADD AI: Replace these lines with GPT-4o call (see integration steps above)
-        logger.info("Monthly report generated (DUMMY MODE)", { userId, month });
-        const insights = [
-            `[DUMMY] You completed ${rawMetrics.totalAttempts} exercises this month.`,
-            `[DUMMY] Your accuracy was ${rawMetrics.avgAccuracy}%.`,
-            `[DUMMY] You spent ${rawMetrics.totalTimeSpent} minutes studying.`,
-            "[DUMMY] Keep practising your weak skills to improve mastery.",
-            "[DUMMY] Connect GPT-4o in report.service.js to get real AI insights.",
+        const prompt = `
+            You are an encouraging but analytical AI Tutor writing a monthly learning report for a student.
+            Month: ${month}
+            Student Metrics: ${JSON.stringify(rawMetrics, null, 2)}
+            
+            Generate exactly 5 short, personalized insight bullet points based on these metrics.
+            Focus on their accuracy, time spent, and specifically mention their weak and strong skills.
+            Make it motivating but point out what they need to work on.
+            
+            Return the output STRICTLY as a JSON array of 5 strings. No markdown blocks, just raw JSON array:
+            ["Insight 1", "Insight 2", ...]
+        `;
+
+        logger.info("requesting AI Insights for Monthly Report", { userId, month });
+        const aiResponse = await generateContent(prompt, 500);
+
+        let insights = [
+            `You completed ${rawMetrics.totalAttempts} exercises this month.`,
+            `Your accuracy was ${rawMetrics.avgAccuracy}%.`,
+            `You spent ${rawMetrics.totalTimeSpent} minutes studying.`
         ];
+
+        if (aiResponse) {
+            try {
+                const jsonText = aiResponse.replace(/```(json)?/gi, "").trim();
+                const parsed = JSON.parse(jsonText);
+                if (Array.isArray(parsed) && parsed.length >= 3) {
+                    insights = parsed;
+                }
+            } catch (err) {
+                logger.warn("Failed to parse AI Insights JSON", { error: err.message });
+            }
+        }
         // ─────────────────────────────────────────────────────────────────────
 
         await Report.findOneAndUpdate(

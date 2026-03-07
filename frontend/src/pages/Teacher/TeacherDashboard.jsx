@@ -111,7 +111,8 @@ const TeacherDashboard = () => {
                     {[
                         { icon: '📚', label: 'Create Course', hint: 'Start a new subject or course', link: '/teacher/create-course' },
                         { icon: '➕', label: 'Create Chapter', hint: 'Add a new chapter to a course', link: '/teacher/create-chapter' },
-                        { icon: '📝', label: 'Assign Exercise', hint: 'Set exercises for students' },
+                        { icon: '📖', label: 'Manage Content', hint: 'Add text, images & diagrams to chapters', link: '/teacher/manage-content' },
+                        { icon: '📝', label: 'Practice Sets', hint: 'Create MCQ practice for students', link: '/teacher/practice' },
                         { icon: '📊', label: 'View Analytics', hint: 'Track student performance', link: '/teacher/students' },
                         { icon: '💬', label: 'Ask AI Tutor', hint: 'Get AI suggestions for lessons', link: '/ai-chat' },
                     ].map((a) => (

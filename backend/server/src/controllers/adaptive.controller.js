@@ -8,6 +8,7 @@ import { ApiError } from "../utils/apiError.js";
 import SkillProfile from "../models/SkillProfile.model.js";
 import AttemptLog from "../models/AttemptLog.model.js";
 import * as adaptiveService from "../services/adaptive.service.js";
+import { generateContent } from "../config/gemini.js";
 
 // ─── @desc   Get the student's current difficulty state
 // ─── @route  GET /api/v1/adaptive/state
@@ -54,15 +55,29 @@ export const getNextConcept = asyncHandler(async (req, res) => {
             }
         }
         recommendation = lowestSkill;
+        const prompt = `
+            You are an expert AI tutor guiding a student's learning journey.
+            Here is the student's current skill profile map: ${JSON.stringify(Object.fromEntries(profile.skills))}
+            
+            Based on these mastery scores (0 to 1), identify the single most important concept area the student should study next.
+            Return a short, naturally phrased, motivating sentence (max 20 words).
+            Example: "Focus on 'Photosynthesis' next — you have a great opportunity to improve there."
+        `;
+
+        try {
+            const aiResponse = await generateContent(prompt, 200);
+            if (aiResponse) {
+                recommendationMsg = aiResponse.trim();
+            }
+        } catch (err) {
+            // fallback
+        }
     }
 
-    // DUMMY AI recommendation — replace with GPT-4o call (see note above)
     return res.status(200).json(
         new ApiResponse(200, {
             recommendedSkill: recommendation || "No skill data yet. Start practising to get recommendations!",
-            message: recommendation
-                ? `Focus on "${recommendation}" — you have the most room to grow here.`
-                : "[DUMMY] Complete more exercises to get a personalised AI recommendation.",
+            message: recommendationMsg,
         }, "Next concept recommendation generated")
     );
 });

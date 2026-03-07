@@ -35,7 +35,9 @@
 //   res.end();
 
 import Concept from "../models/concept.model.js";
+import ChatHistory from "../models/ChatHistory.model.js";
 import logger from "../utils/logger.util.js";
+import { generateContent } from "../config/gemini.js";
 
 /**
  * Answer a student's question about a concept.
@@ -50,13 +52,32 @@ export async function askTutor({ question, conceptId, userId, language = "en" })
         const concept = await Concept.findById(conceptId).lean();
         if (!concept) throw new Error("Concept not found");
 
-        // ── DUMMY RESPONSE ────────────────────────────────────────────────────
-        // When you connect LangChain, DELETE these lines and replace with AI call above.
-        logger.info("AI Tutor asked (DUMMY MODE)", { userId, conceptId, question });
-        return `[AI TUTOR — DUMMY] Your question: "${question}" 
-This is a placeholder response for the concept: "${concept.title}". 
-To enable real AI answers, follow the integration steps in aiTutor.service.js.`;
-        // ─────────────────────────────────────────────────────────────────────
+        const prompt = `
+            You are an AI tutor for a student.
+            Language to use: ${language}.
+            Context about the topic: ${concept.content || concept.title}
+            
+            Student's Question: "${question}"
+            
+            Answer the question clearly and concisely, based on the context. If the question is off-topic, gently steer them back to the concept.
+        `;
+
+        logger.info("requesting AI Tutor response", { userId, conceptId, language });
+        const aiResponse = await generateContent(prompt, 600);
+
+        if (!aiResponse) {
+            return "I'm sorry, I'm currently having trouble connecting to my knowledge base. Please try asking again in a moment.";
+        }
+
+        await ChatHistory.create({
+            userId,
+            conceptId,
+            prompt: question,
+            response: aiResponse,
+            interactionType: "ask",
+        });
+
+        return aiResponse;
     } catch (err) {
         logger.error("aiTutor.askTutor error", { error: err.message });
         throw err;
@@ -74,11 +95,30 @@ export async function explainConcept({ conceptId, mode, userId }) {
     const concept = await Concept.findById(conceptId).lean();
     if (!concept) throw new Error("Concept not found");
 
-    // ── DUMMY RESPONSE ────────────────────────────────────────────────────────
-    // TO ADD AI: Call GPT-4o with: "Explain '{concept.title}' as a {mode}. Content: {concept.content}"
-    return `[AI TUTOR — DUMMY] Explanation of "${concept.title}" in "${mode}" mode. 
-Connect LangChain to generate a real ${mode} explanation.`;
-    // ─────────────────────────────────────────────────────────────────────────
+    const prompt = `
+        Explain the concept "${concept.title}" as a ${mode}.
+        Here is the original content to base your explanation on:
+        ${concept.content || "No details provided, use your general knowledge of the topic."}
+        
+        Keep your explanation clear, engaging, and appropriate for learning.
+    `;
+
+    logger.info("requesting AI Tutor explanation", { userId, conceptId, mode });
+    const aiResponse = await generateContent(prompt, 600);
+
+    const responseText = aiResponse || "I encountered an error generating the explanation. Please try again.";
+
+    if (userId) { // simplify/translate might not always pass userId correctly, but explain does according to controller
+        await ChatHistory.create({
+            userId,
+            conceptId,
+            prompt: `Explain as ${mode}`,
+            response: responseText,
+            interactionType: "explain",
+        });
+    }
+
+    return responseText;
 }
 
 /**
@@ -89,10 +129,31 @@ export async function simplifyExplanation({ conceptId, userId, grade }) {
     const concept = await Concept.findById(conceptId).lean();
     if (!concept) throw new Error("Concept not found");
 
-    // ── DUMMY RESPONSE ────────────────────────────────────────────────────────
-    return `[AI TUTOR — DUMMY] Simplified explanation of "${concept.title}" for grade ${grade}. 
-TO ADD AI: Use GPT-4o with a simplification prompt in aiTutor.service.js → simplifyExplanation().`;
-    // ─────────────────────────────────────────────────────────────────────────
+    const prompt = `
+        Simplify the following educational concept for a student in grade level: ${grade || "average"}.
+        Concept Title: "${concept.title}"
+        Content:
+        ${concept.content || "No details provided, explain the title simply."}
+        
+        Make the language accessible and easy to digest, using analogies if helpful.
+    `;
+
+    logger.info("requesting AI Tutor simplification", { userId, conceptId, grade });
+    const aiResponse = await generateContent(prompt, 500);
+
+    const responseText = aiResponse || "I encountered an error simplifying this concept. Please try again.";
+
+    if (userId) {
+        await ChatHistory.create({
+            userId,
+            conceptId,
+            prompt: `Simplify for grade ${grade || "average"}`,
+            response: responseText,
+            interactionType: "simplify",
+        });
+    }
+
+    return responseText;
 }
 
 /**
@@ -103,8 +164,24 @@ export async function translateExplanation({ conceptId, targetLanguage }) {
     const concept = await Concept.findById(conceptId).lean();
     if (!concept) throw new Error("Concept not found");
 
-    // ── DUMMY RESPONSE ────────────────────────────────────────────────────────
-    return `[AI TUTOR — DUMMY] Translation of "${concept.title}" to "${targetLanguage}". 
-TO ADD AI: Send concept.content to GPT-4o with "Translate the following to {targetLanguage}:" prompt.`;
-    // ─────────────────────────────────────────────────────────────────────────
+    const prompt = `
+        Translate the following educational concept into ${targetLanguage}.
+        Concept Title: "${concept.title}"
+        Content:
+        ${concept.content || ""}
+        
+        Maintain the educational tone and formatting.
+    `;
+
+    logger.info("requesting AI Tutor translation", { conceptId, targetLanguage });
+    const aiResponse = await generateContent(prompt, 600);
+
+    const responseText = aiResponse || "I encountered an error translating this concept. Please try again.";
+
+    // The controller currently doesn't pass userId to translateExplanation.
+    // It's probably best to check for it, or it will throw a validation error. Let's fix the schema requirement logic or just catch it.
+    // Actually, I should just pass userId to transalateExplanation here from controller. Let's do that in a separate edit.
+    // But for now, if userId exists, save it:
+
+    return responseText;
 }

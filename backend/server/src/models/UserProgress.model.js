@@ -30,6 +30,12 @@ const userProgressSchema = new mongoose.Schema(
             type: Number,
             default: 960, // 16 hours
         },
+        // Map of chapterId → best quiz score (used for 70% pass gate)
+        chapterQuizScores: {
+            type: Map,
+            of: Number,
+            default: {},
+        },
     },
     { timestamps: true }
 );

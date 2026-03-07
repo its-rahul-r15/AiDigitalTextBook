@@ -21,11 +21,10 @@ import { paginate } from "../utils/paginate.util.js";
 // ─── @access Student
 export const generateQuestion = asyncHandler(async (req, res) => {
     const { conceptId, difficulty = 3, type = "mcq" } = req.query;
-    if (!conceptId) throw new ApiError(400, "conceptId query param is required");
 
     const exercise = await questionGenService.generateQuestion({
         conceptId,
-        difficulty: parseInt(difficulty),
+        difficulty: difficulty,
         type,
         userId: req.user._id,
     });
@@ -213,3 +212,105 @@ export const batchGenerateQuestions = asyncHandler(async (req, res) => {
         new ApiResponse(201, exercises, `${count} questions generated (DUMMY — connect AI for real questions)`)
     );
 });
+
+// ─── @desc   Generate a chapter quiz (5 MCQ from chapter content via AI)
+// ─── @route  POST /api/v1/exercises/chapter-quiz/generate
+// ─── @access Student
+export const generateChapterQuiz = asyncHandler(async (req, res) => {
+    const { chapterId } = req.body;
+    if (!chapterId) throw new ApiError(400, "chapterId is required");
+
+    const chapterQuizService = await import("../services/chapterQuiz.service.js");
+    const exercises = await chapterQuizService.generateChapterQuiz({
+        chapterId,
+        userId: req.user._id,
+        count: 5,
+    });
+
+    return res.status(200).json(
+        new ApiResponse(200, exercises, "Chapter quiz generated successfully")
+    );
+});
+
+// ─── @desc   Submit chapter quiz answers and get score
+// ─── @route  POST /api/v1/exercises/chapter-quiz/submit
+// ─── @access Student
+export const submitChapterQuiz = asyncHandler(async (req, res) => {
+    const { chapterId, answers } = req.body;
+    // answers = [{ exerciseId, answer }]
+
+    if (!chapterId) throw new ApiError(400, "chapterId is required");
+    if (!Array.isArray(answers) || answers.length === 0) {
+        throw new ApiError(400, "answers array is required");
+    }
+
+    let correctCount = 0;
+    const results = [];
+
+    for (const { exerciseId, answer } of answers) {
+        const exercise = await Exercise.findById(exerciseId).lean();
+        if (!exercise) continue;
+
+        const isCorrect = answer?.trim()?.toLowerCase() === exercise.solution?.trim()?.toLowerCase();
+        if (isCorrect) correctCount++;
+
+        results.push({
+            exerciseId,
+            question: exercise.question,
+            yourAnswer: answer,
+            correctAnswer: exercise.solution,
+            isCorrect,
+        });
+
+        // Log the attempt
+        await AttemptLog.create({
+            userId: req.user._id,
+            exerciseId,
+            conceptId: exercise.conceptId,
+            answer,
+            isCorrect,
+            score: isCorrect ? 100 : 0,
+            timeTaken: 0,
+            mode: "exam",
+        });
+    }
+
+    const totalQuestions = results.length;
+    const scorePercent = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
+    const passed = scorePercent >= 70;
+
+    // Save best score to UserProgress
+    const UserProgress = (await import("../models/UserProgress.model.js")).default;
+    const progress = await UserProgress.findOne({ userId: req.user._id });
+
+    if (progress) {
+        const currentBest = progress.chapterQuizScores?.get(chapterId) || 0;
+        if (scorePercent > currentBest) {
+            progress.chapterQuizScores.set(chapterId, scorePercent);
+        }
+        // If passed, also mark chapter as completed
+        if (passed && !progress.completedChapters.includes(chapterId)) {
+            progress.completedChapters.push(chapterId);
+        }
+        await progress.save();
+    } else {
+        const scoreMap = {};
+        scoreMap[chapterId] = scorePercent;
+        await UserProgress.create({
+            userId: req.user._id,
+            chapterQuizScores: scoreMap,
+            completedChapters: passed ? [chapterId] : [],
+        });
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, {
+            score: scorePercent,
+            passed,
+            correctCount,
+            totalQuestions,
+            results,
+        }, passed ? "🎉 Congratulations! You passed the chapter quiz!" : "You need 70% to pass. Read the chapter again and try!")
+    );
+});
+

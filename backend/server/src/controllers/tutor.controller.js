@@ -11,6 +11,9 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { ApiError } from "../utils/apiError.js";
 import * as aiTutorService from "../services/aiTutor.service.js";
+import { generateContent } from "../config/gemini.js";
+import ChatHistory from "../models/ChatHistory.model.js";
+import logger from "../utils/logger.util.js";
 
 // ─── @desc   Ask AI a question about a concept (streaming in future, JSON now)
 // ─── @route  POST /api/v1/tutor/ask
@@ -78,6 +81,7 @@ export const translateExplanation = asyncHandler(async (req, res) => {
     const translated = await aiTutorService.translateExplanation({
         conceptId,
         targetLanguage,
+        userId: req.user._id,
     });
 
     return res.status(200).json(new ApiResponse(200, { explanation: translated }, "Translation generated"));
@@ -91,9 +95,99 @@ export const explainRelevance = asyncHandler(async (req, res) => {
     const { conceptId } = req.body;
     if (!conceptId) throw new ApiError(400, "conceptId is required");
 
-    // DUMMY RESPONSE — replace with GPT-4o call
-    const relevance = `[DUMMY] Understanding this concept helps you in everyday life. 
-Real-world connections will appear here once you connect GPT-4o in tutor.controller.js → explainRelevance().`;
+    const prompt = `
+        Explain the real-world connections or relevance of this concept for a student.
+        Make it engaging and show why learning this matters in everyday life or future careers.
+    `;
+
+    logger.info("requesting AI Tutor relevance explanation", { conceptId });
+    const aiResponse = await generateContent(prompt, 500);
+
+    const relevance = aiResponse || "I encountered an error generating the explanation. Please try again.";
+
+    if (aiResponse) {
+        await ChatHistory.create({
+            userId: req.user._id,
+            conceptId,
+            prompt: "Explain relevance",
+            response: relevance,
+            interactionType: "relevance",
+        });
+    }
 
     return res.status(200).json(new ApiResponse(200, { relevance }, "Relevance explanation generated"));
+});
+
+// ─── @desc   Free-form chat with AI (no conceptId required)
+// ─── @route  POST /api/v1/tutor/chat
+// ─── @access Student
+export const chatWithTutor = asyncHandler(async (req, res) => {
+    const { message } = req.body;
+    if (!message) throw new ApiError(400, "message is required");
+
+    const prompt = `
+        You are an AI Tutor for a student platform. 
+        The student says: "${message}"
+        Respond in a helpful, educational, and concise manner.
+    `;
+
+    logger.info("tutor chat request", { userId: req.user._id });
+    const aiResponse = await generateContent(prompt, 600);
+    const reply = aiResponse || "I'm having trouble thinking right now. Please try again.";
+
+    if (aiResponse) {
+        await ChatHistory.create({
+            userId: req.user._id,
+            prompt: message,
+            response: reply,
+            interactionType: "chat",
+        });
+    }
+
+    return res.status(200).json(new ApiResponse(200, { reply }, "Chat response generated"));
+});
+
+// ─── @desc   Get user's chat history (paginated, newest first)
+// ─── @route  GET /api/v1/tutor/history?page=1&limit=50
+// ─── @access Student
+export const getChatHistory = asyncHandler(async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 50;
+    const skip = (page - 1) * limit;
+
+    const [messages, total] = await Promise.all([
+        ChatHistory.find({ userId: req.user._id })
+            .sort({ createdAt: 1 })
+            .skip(skip)
+            .limit(limit)
+            .lean(),
+        ChatHistory.countDocuments({ userId: req.user._id }),
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(200, { messages, total, page, totalPages: Math.ceil(total / limit) }, "Chat history fetched")
+    );
+});
+
+// ─── @desc   Search through user's chat history
+// ─── @route  GET /api/v1/tutor/history/search?q=keyword
+// ─── @access Student
+export const searchChatHistory = asyncHandler(async (req, res) => {
+    const q = req.query.q?.trim();
+    if (!q) throw new ApiError(400, "Search query is required");
+
+    const results = await ChatHistory.find({
+        userId: req.user._id,
+        $or: [
+            { prompt: { $regex: q, $options: "i" } },
+            { response: { $regex: q, $options: "i" } },
+        ],
+    })
+        .sort({ createdAt: -1 })
+        .limit(50)
+        .lean();
+
+    return res.status(200).json(
+        new ApiResponse(200, { results, total: results.length }, "Search completed")
+    );
 });

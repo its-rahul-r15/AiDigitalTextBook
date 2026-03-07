@@ -10,6 +10,7 @@ const STUDENT_NAV = [
     { to: '/notes', label: 'Smart Notes', icon: '📝' },
     { to: '/flashcards', label: 'Flashcards', icon: '🗂️' },
     { to: '/practice', label: 'Practice', icon: '✦' },
+    { to: '/teacher-practice', label: 'Assignments', icon: '📋' },
     { to: '/ai-chat', label: 'AI Tutor', icon: '💬' },
     { to: '/library', label: 'Library', icon: '🏛️' },
 ];
@@ -17,6 +18,7 @@ const STUDENT_NAV = [
 const TEACHER_NAV = [
     { to: '/teacher', label: 'Dashboard', icon: '🏠' },
     { to: '/learn', label: 'Textbooks', icon: '📖' },
+    { to: '/teacher/practice', label: 'Practice Sets', icon: '📝' },
     { to: '/library', label: 'Courses', icon: '🏛️' },
     { to: '/notes', label: 'Smart Notes', icon: '📝' },
     { to: '/profile', label: 'Profile', icon: '👤' },

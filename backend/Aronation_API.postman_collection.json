@@ -303,7 +303,7 @@
                     }
                 },
                 {
-                    "name": "Save Highlight (AI Dummy)",
+                    "name": "Save Highlight",
                     "request": {
                         "method": "POST",
                         "header": [
@@ -347,7 +347,7 @@
             ]
         },
         {
-            "name": "🤖 AI Tutor (Dummy)",
+            "name": "🤖 AI Tutor ",
             "item": [
                 {
                     "name": "Ask Tutor",

@@ -20,4 +20,10 @@ export const exerciseService = {
 
     // [Teacher] Batch generate questions for a chapter
     batchGenerate: (data) => api.post('/exercises/batch-generate', data),
+
+    // Chapter quiz — AI-generated quiz for chapter completion gate
+    generateChapterQuiz: (chapterId) =>
+        api.post('/exercises/chapter-quiz/generate', { chapterId }),
+    submitChapterQuiz: (data) =>
+        api.post('/exercises/chapter-quiz/submit', data),
 };

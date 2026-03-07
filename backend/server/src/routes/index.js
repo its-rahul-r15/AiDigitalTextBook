@@ -13,6 +13,7 @@ import teacherRouter from "./teacher.routes.js";
 import notesRouter from "./notes.routes.js";
 import gamificationRouter from "./gamification.routes.js";
 import syncRouter from "./sync.routes.js";
+import practiceRouter from "./practice.routes.js";
 
 const router = Router();
 
@@ -26,5 +27,6 @@ router.use("/teacher", teacherRouter);      // /api/v1/teacher/*
 router.use("/notes", notesRouter);        // /api/v1/notes/*       ← AI dummy
 router.use("/gamification", gamificationRouter); // /api/v1/gamification/*
 router.use("/sync", syncRouter);         // /api/v1/sync/*
+router.use("/practice", practiceRouter);     // /api/v1/practice/*
 
 export default router;

@@ -12,6 +12,7 @@ import Concept from "../models/concept.model.js";
 import Exercise from "../models/Exercise.model.js";
 import { DIFFICULTY_LABEL, EXERCISE_TYPES } from "../utils/constants.util.js";
 import logger from "../utils/logger.util.js";
+import { generateContent } from "../config/gemini.js";
 
 /**
  * Generate a new question for a concept (or pick a random concept if none given).
@@ -50,72 +51,57 @@ export async function generateQuestion({ conceptId, difficulty = 3, type = EXERC
 
     const diffLabel = DIFFICULTY_LABEL[difficultyNum] || "medium";
 
-    // ── Dummy question bank (topic-aware) ─────────────────────────────────────
-    // Replace this block with a real GPT-4o call when AI is connected.
-    logger.info("Question generated (DUMMY MODE)", { conceptId: concept._id, difficultyNum, type });
+    const pool = [
+        {
+            question: "What is this concept primarily about?",
+            options: ["Option A", "Option B", "Option C", "Option D"],
+            solution: "Option A"
+        }
+    ];
+    let picked = pool[0];
 
-    const QUESTION_BANK = {
-        mcq: [
-            {
-                question: `Which of the following best describes the concept of "${concept.title}"?`,
-                options: [
-                    `The primary principle of ${concept.title}`,
-                    "An unrelated concept from a different field",
-                    "A historical term no longer in use",
-                    "A mathematical constant"
-                ],
-                solution: `The primary principle of ${concept.title}`,
-            },
-            {
-                question: `What is the key application of "${concept.title}" in real life?`,
-                options: [
-                    "It helps solve problems efficiently",
-                    "It has no practical application",
-                    "It only applies in theoretical physics",
-                    "It was invented in the 20th century"
-                ],
-                solution: "It helps solve problems efficiently",
-            },
-            {
-                question: `Which statement about "${concept.title}" is CORRECT?`,
-                options: [
-                    `${concept.title} has a foundational role in its subject area`,
-                    `${concept.title} was disproved in 1900`,
-                    `${concept.title} applies only to advanced topics`,
-                    `${concept.title} is unrelated to real-world problems`
-                ],
-                solution: `${concept.title} has a foundational role in its subject area`,
-            },
-        ],
-        "fill-blank": [
-            {
-                question: `"${concept.title}" is a concept studied in ________.`,
-                options: [],
-                solution: "its subject domain",
-            },
-        ],
-        open: [
-            {
-                question: `In your own words, explain what "${concept.title}" means and give one real-world example.`,
-                options: [],
-                solution: "open",
-            },
-        ],
-    };
+    // ── Real AI Question Generation ──────────────────────────────────────────
+    const prompt = `
+        You are an expert teacher creating a ${diffLabel} difficulty ${type} question about the concept "${concept.title}".
+        Here is the content of the concept: ${concept.content || "Use general knowledge of this topic."}
+        
+        Generate exactly ONE question in this strict JSON format (do not use markdown code blocks, just raw JSON):
+        {
+            "question": "The question text",
+            "options": ["Option A", "Option B", "Option C", "Option D"], // Provide 4 options for MCQ, empty array [] for open/fill-blank
+            "solution": "The exact correct option string (for MCQ), or the exact word (for fill-blank), or 'open' (for open)"
+        }
+    `;
 
-    const pool = QUESTION_BANK[type] || QUESTION_BANK.mcq;
-    const picked = pool[Math.floor(Math.random() * pool.length)];
+    try {
+        logger.info("requesting AI Generated question", { conceptId: concept._id, diffLabel, type });
+        // Use a bit more tokens for questions
+        const aiResponse = await generateContent(prompt, 600);
+
+        if (aiResponse) {
+            // Strip potential markdown formatting that Gemini might sneak in
+            const jsonText = aiResponse.replace(/```(json)?/gi, "").trim();
+            const aiGenerated = JSON.parse(jsonText);
+
+            if (aiGenerated.question && typeof aiGenerated.solution !== "undefined") {
+                picked = aiGenerated; // Use the AI generated one instead of fallback
+            }
+        }
+    } catch (err) {
+        logger.warn("Failed to parse AI generated question, falling back to dummy", { error: err.message });
+    }
+    // ────────────────────────────────────────────────────────────────────────‒
 
     const exerciseData = {
         conceptId: concept._id,
-        type: QUESTION_BANK[type] ? type : "mcq",
+        type: type || "mcq",
         difficulty: difficultyNum,
         isAiGenerated: true,
         generationSeed: seed,
         question: `[${diffLabel.toUpperCase()}] ${picked.question}`,
-        options: picked.options,
+        options: picked.options || [],
         steps: [],
-        solution: picked.solution,
+        solution: picked.solution || "open",
     };
 
     // Save to DB so this exerciseId is valid when student submits

@@ -18,6 +18,10 @@ import TeacherDashboard from '../pages/Teacher/TeacherDashboard';
 import CreateChapterPage from '../pages/Teacher/CreateChapterPage';
 import CreateCoursePage from '../pages/Teacher/CreateCoursePage';
 import StudentManagementPage from '../pages/Teacher/StudentManagementPage';
+import ManageChapterContentPage from '../pages/Teacher/ManageChapterContentPage';
+import ManagePracticePage from '../pages/Teacher/ManagePracticePage';
+import PracticeAnalyticsPage from '../pages/Teacher/PracticeAnalyticsPage';
+import TeacherPracticePage from '../pages/Practice/TeacherPracticePage';
 
 // Blocks unauthenticated access
 const ProtectedRoute = ({ children }) => {
@@ -68,6 +72,16 @@ const AppRouter = () => (
                 <Route path="/teacher/students" element={
                     <TeacherRoute><StudentManagementPage /></TeacherRoute>
                 } />
+                <Route path="/teacher/manage-content" element={
+                    <TeacherRoute><ManageChapterContentPage /></TeacherRoute>
+                } />
+                <Route path="/teacher/practice" element={
+                    <TeacherRoute><ManagePracticePage /></TeacherRoute>
+                } />
+                <Route path="/teacher/practice/:id/analytics" element={
+                    <TeacherRoute><PracticeAnalyticsPage /></TeacherRoute>
+                } />
+                <Route path="/teacher-practice" element={<TeacherPracticePage />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -278,3 +278,208 @@
 .sendBtn:disabled {
     opacity: 0.5;
 }
+
+/* ═══ Loading State ═══ */
+.loadingState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ═══ Header updates ═══ */
+.headerInfo {
+    flex: 1;
+}
+
+.searchToggle {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.searchToggle:hover {
+    background: var(--bg-main, #f3f4f6);
+}
+
+.searchToggleActive {
+    background: var(--primary-light, #eef2ff);
+}
+
+/* ═══ Search Bar ═══ */
+.searchBar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--bg-card, #fff);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg, 12px);
+    margin-bottom: 4px;
+    animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.searchInput {
+    flex: 1;
+    border: none;
+    font-size: 14px;
+    background: transparent;
+    color: var(--text-primary);
+    outline: none;
+    font-family: inherit;
+}
+
+.searchInput::placeholder {
+    color: var(--text-secondary);
+}
+
+.searchCount {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: var(--bg-main, #f3f4f6);
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.searchClose {
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px;
+}
+
+/* ═══ Search Results Dropdown ═══ */
+.searchResults {
+    max-height: 200px;
+    overflow-y: auto;
+    background: var(--bg-card, #fff);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg, 12px);
+    margin-bottom: 8px;
+    animation: slideDown 0.2s ease;
+}
+
+.searchResultItem {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-light, #f3f4f6);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.searchResultItem:hover {
+    background: var(--bg-main, #f9fafb);
+}
+
+.searchResultItem:last-child {
+    border-bottom: none;
+}
+
+.searchResultQ {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.searchResultA {
+    font-size: 12px;
+    color: var(--text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 4px;
+}
+
+.searchLabel {
+    font-weight: 800;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.searchResultTime {
+    font-size: 10px;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* ═══ Date Divider ═══ */
+.dateDivider {
+    display: flex;
+    justify-content: center;
+    padding: 12px 0 8px;
+}
+
+.dateDivider span {
+    background: rgba(225, 228, 232, 0.8);
+    color: #65676b;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+}
+
+/* ═══ Message Timestamps ═══ */
+.msgTime {
+    font-size: 10px;
+    color: var(--text-secondary, #a0aec0);
+    margin-top: 4px;
+    align-self: flex-end;
+    opacity: 0.7;
+}
+
+.userBubble .msgTime {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ═══ Highlight animation (jump to search result) ═══ */
+.highlightRow {
+    animation: highlightFlash 2s ease;
+}
+
+@keyframes highlightFlash {
+    0% {
+        background: rgba(99, 102, 241, 0.15);
+    }
+
+    50% {
+        background: rgba(99, 102, 241, 0.08);
+    }
+
+    100% {
+        background: transparent;
+    }
+}

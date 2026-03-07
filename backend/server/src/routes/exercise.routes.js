@@ -12,6 +12,10 @@ router.get("/:id", protect, exerciseController.getExerciseById);
 router.post("/submit", protect, exerciseController.submitAnswer);
 router.post("/hint", protect, exerciseController.getHint);           // AI hint (dummy)
 
+// ── Chapter Quiz routes ──────────────────────────────────────────────────────
+router.post("/chapter-quiz/generate", protect, exerciseController.generateChapterQuiz);
+router.post("/chapter-quiz/submit", protect, exerciseController.submitChapterQuiz);
+
 // ── Teacher routes ────────────────────────────────────────────────────────────
 router.post("/batch-generate", protect, allow("teacher", "admin"), exerciseController.batchGenerateQuestions);
 
